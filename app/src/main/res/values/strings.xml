@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Tracker</string>
+    <string name="email">Email</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="height">Height</string>
+    <string name="activity_level">Activity level</string>
+    <string name="weight">Weight</string>
+    <string name="target_weight">Target weight</string>
+    <string name="measurement">Measurement</string>
+    <string name="cm">cm</string>
+    <string name="feet_inches">feet and inches</string>
+    <string name="kg">kg</string>
+    <string name="pound">pound</string>
+
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+
+    <string-array name="array_months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+</resources>
