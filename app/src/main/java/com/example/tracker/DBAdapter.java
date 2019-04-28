@@ -10,7 +10,7 @@ import android.util.Log;
 public class DBAdapter {
     //Create variable
     private String databaseName ="Tracker";
-    private int databaseVersion = 41;
+    private int databaseVersion = 49;
 
     //Create Database variable
     private Context context;
@@ -50,6 +50,7 @@ public class DBAdapter {
                         " user_weight INT, " +
                         " user_target_weight INT, " +
                         " user_target_weight_level INT," +
+                        " user_measurement VARHCAR, " +
                         " user_last_seen TIME," +
                         " user_note VARCHAR);");
 
@@ -255,4 +256,41 @@ public class DBAdapter {
     }
 
 
+    public String quoteSmart(String value) {
+        // Is numeric?
+        boolean isNumeric = false;
+        try {
+            double myDouble = Double.parseDouble(value);
+            isNumeric = true;
+        } catch (NumberFormatException e) {
+            System.out.println("Could not parse " + e);
+        }
+        if (isNumeric == false) {
+            // Escapes special characters in a string for use in an SQL statement
+            if (value != null && value.length() > 0) {
+                value = value.replace("\\", "\\\\");
+                value = value.replace("'", "\\'");
+                value = value.replace("\0", "\\0");
+                value = value.replace("\n", "\\n");
+                value = value.replace("\r", "\\r");
+                value = value.replace("\"", "\\\"");
+                value = value.replace("\\x1a", "\\Z");
+            }
+        }
+
+        value = "'" + value + "'";
+
+        return value;
+    }
+
+    public double quoteSmart(double value) {
+        return value;
+    }
+
+    public int quoteSmart(int value) {
+        return value;
+    }
+
 }
+
+
