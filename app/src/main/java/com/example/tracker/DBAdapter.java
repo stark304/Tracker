@@ -1,16 +1,18 @@
 package com.example.tracker;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DBAdapter {
     //Create variable
     private String databaseName ="Tracker";
-    private int databaseVersion = 49;
+    private int databaseVersion = 61;
 
     //Create Database variable
     private Context context;
@@ -36,6 +38,32 @@ public class DBAdapter {
         {
             try
             {
+                db.execSQL("CREATE TABLE IF NOT EXISTS goal (" +
+                        " goal_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        " goal_current_weight INT, " +
+                        " goal_target_weight INT, " +
+                        " goal_i_want_to VARCHAR, " +
+                        " goal_weekly_goal VARCHAR, " +
+                        " goal_date DATE, " +
+                        " goal_energy_bmr INT, " +
+                        " goal_proteins_bmr INT, " +
+                        " goal_carbs_bmr INT, " +
+                        " goal_fat_bmr INT, " +
+                        " goal_energy_diet INT, " +
+                        " goal_proteins_diet INT, " +
+                        " goal_carbs_diet INT, " +
+                        " goal_fat_diet INT, " +
+                        " goal_energy_with_activity INT, " +
+                        " goal_proteins_with_activity INT, " +
+                        " goal_carbs_with_activity INT, " +
+                        " goal_fat_with_activity INT, " +
+                        " goal_energy_with_activity_and_diet INT, " +
+                        " goal_proteins_with_activity_and_diet INT, " +
+                        " goal_carbs_with_activity_and_diet INT, " +
+                        " goal_fat_with_activity_and_diet INT, " +
+                        " goal_notes VARCHAR);");
+
+
                 db.execSQL("CREATE TABLE IF NOT EXISTS users (" +
                         " user_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         " user_email VARCHAR," +
@@ -148,18 +176,47 @@ public class DBAdapter {
     //Insert food into data
     public void insert(String table,String fields,String values)
     {
-        db.execSQL("INSERT INTO " + table + "("+ fields +") VALUES ("+values+")");
+        try {
+            db.execSQL("INSERT INTO " + table + "(" + fields + ") VALUES (" + values + ")");
+        } catch (SQLiteException e) {
+            System.out.println("Insert error: " + e.toString());
+        }
+
     }
 
     //Counter
     public int count(String table)
     {
-        Cursor mCount = db.rawQuery("SELECT COUNT(*) FROM " + table + "", null);
-        mCount.moveToFirst();
-        int count= mCount.getInt(0);
-        mCount.close();
-        return count;
+        try {
+            Cursor mCount = db.rawQuery("SELECT COUNT(*) FROM " + table + "", null);
+            mCount.moveToFirst();
+            int count = mCount.getInt(0);
+            mCount.close();
+            return count;
+        } catch (SQLiteException e) {
+            return -1;
+        }
     }
+
+    //Select
+    public Cursor selectPrimaryKey(String table, String primaryKey, long rowId, String[] fields) throws SQLException {
+        Cursor mCursor = db.query(table, fields, primaryKey + "=" + rowId, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+
+    //Update
+    public boolean update(String table, String primaryKey, long rowId, String field, String value) {
+        // Remove first and last value of value
+        value = value.substring(1, value.length() - 1); // removes ' after running quote smart
+
+        ContentValues args = new ContentValues();
+        args.put(field, value);
+        return db.update(table, args, primaryKey + "=" + rowId, null) > 0;
+    }
+
 
 
     // To insert to category table

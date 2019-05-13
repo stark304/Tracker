@@ -13,6 +13,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
@@ -358,10 +360,19 @@ public class SignUp extends AppCompatActivity {
             db.insert("users", "user_id, user_email, user_dob, user_gender, user_height, user_activity_level, user_weight, user_measurement",
                     stringInput);
 
+            DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+            String goalDate = df1.format(Calendar.getInstance().getTime());
+            String goalDateSQL = db.quoteSmart(goalDate);
+
+            stringInput = "NULL, " + doubleWeightSQL + "," + goalDateSQL;
+            db.insert("goal",
+                    "goal_id, goal_current_weight, goal_date",
+                    stringInput);
+
             db.close();
 
             //Move New User to Main Activity
-            Intent i = new Intent(SignUp.this, MainActivity.class);
+            Intent i = new Intent(SignUp.this, SignUpGoal.class);
             startActivity(i);
         } else {
             textViewErrorMessage.setText(errorMessage);

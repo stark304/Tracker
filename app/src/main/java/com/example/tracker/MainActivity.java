@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(MainActivity.this, SignUp.class);
             startActivity(i);
         }
+        db.close();
     }
 
 
