@@ -239,11 +239,11 @@ public class SignUpGoal extends AppCompatActivity {
                 "user_measurement"
         };
         Cursor c = db.selectPrimaryKey("users", "user_id", rowID, fields);
-        String mesurment;
-        mesurment = c.getString(1);
+        String measurement;
+        measurement = c.getString(1);
 
         // Metric or imperial?
-        if (mesurment.startsWith("m")) {
+        if (measurement.startsWith("m")) {
             // Metric
         } else {
             // Imperial
